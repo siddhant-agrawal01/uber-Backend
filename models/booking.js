@@ -18,13 +18,13 @@ const bookingSchema = new mongoose.Schema({
         latitude: { type: Number },
         longitude: { type: Number },
     },
-    fare:Number,
-    status:{
-        type:String,
-        enum:['pending','confirmed','completed','canceled'],default:'pending'
+    fare: Number,
+    status: {
+        type: String,
+        enum: ['pending', 'confirmed', 'completed', 'canceled'], default: 'pending'
     },
-    rating:Number,
-    feedback:String
+    rating: Number,
+    feedback: String
 
 
 })
@@ -33,3 +33,5 @@ const bookingSchema = new mongoose.Schema({
 //booking->pending(by default) --> accepted by driver --> then canceled --> again goes pending(autmatically)
 //-->canceled -> if a ride is hunged for pending for n minutes then canceled it completely
 
+const Booking = mongoose.model('Booking', bookingSchema)
+export default Booking

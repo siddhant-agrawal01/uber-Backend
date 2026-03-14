@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const client = createClient({
+const redisClient = createClient({
   username: process.env.REDIS_USERNAME,
   password: process.env.REDIS_PASSWORD,
   socket: {
@@ -12,13 +12,13 @@ const client = createClient({
   }
 });
 
-client.on("error", (err) => {
+redisClient.on("error", (err) => {
   console.error("Redis Client Error:", err);
 });
 
 export async function connectRedis() {
-  await client.connect();
+  await redisClient.connect();
   console.log(" Redis connected");
 }
 
-export default client;
+export default redisClient;
