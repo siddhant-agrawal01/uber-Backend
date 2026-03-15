@@ -57,6 +57,36 @@ const createBooking = (io) => {
     }
 }
 
+//this function called by driver
+const confirmBooking = async (io) => {
+    try {
+        //first first the booking id
+        const { bookingId } = req.body
+        //now assign driver to booking
+        //we will pass the the id of that driver that accepted the ride
+        const booking = await bookingService.assignDriver(bookingId, req.user._id)
+        //now after confirmation of ride we will remove remaiing driver from redis
+
+        const notifiedDriverIds = await locationService.getNotifiedDrivers(bookingId)
+
+        for (const driverId of notifiedDriverIds) {
+            const driverSocketId = await locationService.getDriverSocket(driverId)
+//jinse ride acept ki hai usko confirmed ka message emit hoga
+            if (driverSocketId) {
+                if (driverId == req.user.id) {
+                    io.to(driverSocketId).emit('rideconfirmed', { bookingId, driverId: req.user._id })
+                }
+                else {
+                    //bakkiyo ko remove booking ka message emit hoga
+                    io.to(driverSocketId).emit('removeBooking', { bookingId })
+                }
+            }
+        }
+        return res.status(200).send({ data: booking, success: true, error: null, message: "Booking confirmed successfully" })
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+}
 export default {
-    createBooking
+    createBooking, confirmBooking
 }

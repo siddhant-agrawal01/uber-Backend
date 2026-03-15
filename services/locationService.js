@@ -48,16 +48,17 @@ class LocationService {
             await redisClient.sAdd(`notifiedDrivers:${bookingId}`, driverId)
 
         }
-// let first driverid mili
-//[notifiedDrivers:bkg1=>[1]]
-//fir agr ek aur driver id mili to ek aur add hojaeyga set mei
-//notifiedDrivers:bkg1=>[1,2]
-//agr ek driver accept krega to usko remove kr denge
+        // let first driverid mili
+        //[notifiedDrivers:bkg1=>[1]]
+        //fir agr ek aur driver id mili to ek aur add hojaeyga set mei
+        //notifiedDrivers:bkg1=>[1,2]
+        //agr ek driver accept krega to usko remove kr denge
+    }
 
+    async getNotifiedDrivers(bookingId) {
+        const nearByDrivers = await redisClient.sMembers(`notifiedDrivers:${bookingId}`)
+        return nearByDrivers
+    }
 }
-}
-
-//for fiding nearby drivers
-
 
 export default new LocationService()

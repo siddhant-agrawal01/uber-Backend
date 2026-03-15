@@ -27,10 +27,18 @@ const findNearByDrivers = async (location, radius = 5) => {
     if (isNaN(longitude) || isNaN(latitude) || isNaN(radiusKm)) {
         throw new Error('Invalid coordinates or radius')
     }
-//saving the driver location to redis cache along with its id
+    //saving the driver location to redis cache along with its id
     const nearByDrivers = await locationService.findNearByDrivers(longitude, latitude, radiusKm)
 
 }
+
+const assignDriver = async (bookingId, driverId) => {
+    //jo starting mei driver=NULL assign hua the creating booking k time usko update krdenge
+    //ye wali driver id se
+    const booking = await bookingRepository.updateBookingStatus(bookingId, driverId, 'confirmed')
+    if (!booking) throw new Error('Booking not found')
+    return booking
+}
 export default {
-    createBooking
+    createBooking, findNearByDrivers, assignDriver
 }
