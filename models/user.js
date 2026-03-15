@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 
 const userSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    name: { type: String },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['driver', 'passenger'] },
@@ -23,16 +23,15 @@ const userSchema = new mongoose.Schema({
 //  ,it will make sure the password is encrypted
 //also if user try to login then it comapre the pw with which is already on the system
 //this is a pre save middleware that runs before a document is saved to the db
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function () {
     if (!this.isModified('password')) {
-        return next()
+        return
     }
 
     const hashedPassword = await bcrypt.hash(this.password, 10);
     this.password = hashedPassword;
-    next()
-
 })
+
 
 
 userSchema.methods.comparePassword = async function (password) {

@@ -24,7 +24,7 @@ app.use('/api/auth', authRoutes);
 // app.use('/api/bookings', bookingRoutes(io))
 // app.use('/api/bookings', bookingRoutes())
 app.use('/api/drivers', driverRoutes)
-// app.use('/api/passengers', passengerRoutes())
+app.use('/api/passengers', passengerRoutes)
 connectDB()
 async function start() {
     await connectRedis();
