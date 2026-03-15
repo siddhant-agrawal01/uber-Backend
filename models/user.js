@@ -1,14 +1,14 @@
-import mongoose from " mongoose"
+import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 
 const userSchema = new mongoose.Schema({
-    name: { type: string, required: true },
-    email: { type: string, unique: true, required: true },
-    password: { type: string, required: true },
-    role: { type: string, enum: ['driver', 'passenger'] },
+    name: { type: String, required: true },
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
+    role: { type: String, enum: ['driver', 'passenger'] },
     location: {
         type: {
-            type: string,
+            type: String,
             default: 'Point',
             enum: ['Point']
         },

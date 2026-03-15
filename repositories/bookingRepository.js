@@ -1,4 +1,4 @@
-import Booking from "../models/booking"
+import Booking from "../models/booking.js"
 
 const findBooking = async (criteria) => {
     return await Booking.findOne(criteria)

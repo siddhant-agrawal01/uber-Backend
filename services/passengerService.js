@@ -1,9 +1,9 @@
-import bookingRepostory from "../repositories/bookingRepository"
+import bookingRepostory from "../repositories/bookingRepository.js"
 
-import passengerRepository from "../repositories/passengerRepository"
+import passengerRepository from "../repositories/passengerRepository.js"
 const getPassengerBookings = async (passengerId) => {
     try {
-        const passengerDetails = passengerRepository.findPassengerById(passengerId)
+        const passengerDetails = await passengerRepository.findPassengerById(passengerId)
         if (!passengerDetails) throw new Error("passenger not found")
         return passengerDetails
     } catch (error) {

@@ -1,7 +1,9 @@
-import express from "express"
+// import express from "express"
 
-const {createBooking,confirmBooking,}
+// // const {createBooking,confirmBooking,}
 
-const router  = express.Router()
-router.post('/',createBooking(io))
-router.post('/confirm',confirmBooking(io))
+// const router  = express.Router()
+// // router.post('/',createBooking(io))
+// router.post('/confirm',confirmBooking(io))
+
+// export default router

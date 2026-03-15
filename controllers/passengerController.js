@@ -1,4 +1,4 @@
-import passenger from "./services/passengerService"
+import passengerService from "../services/passengerService.js"
 
 const getPassengerBookings = async (req, res) => {
     try {
@@ -35,5 +35,4 @@ const provideFeedback = async (req, res) => {
 
     }
 }
-
-export default { getPassengerBookings, provideFeedback }
+export { getPassengerBookings, provideFeedback }
