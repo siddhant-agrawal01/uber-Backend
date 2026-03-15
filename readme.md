@@ -24,3 +24,13 @@ driver login->avaible for bookins -> socket connection open
 
 2nd -> jis driver ne accept ki ride uski id /createBooking mei jo driver:null tha usme update hojaygi
 
+
+//ek booking req aayi maano
+//aur 3 drivers area mei the 
+booking1 
+dr [1,3,5]
+
+
+redis mei in driver ki ids , booking ids k saath store karelnge , jab ek driver accept krelga ride ko , to jisne accept kari usko chorh k baakiyo se wo notifcaiotn remove kra denge booking ka 
+
+
