@@ -10,8 +10,13 @@ const authMiddleware = async (req, res, next) => {
     try {
         const verified = jwt.verify(token, process.env.JWT_SECRET)
         req.user = await User.findById(verified.id)
+        if (!req.user) {
+            console.log("Token valid but user not found in DB:", verified.id);
+            return res.status(401).send('User no longer exists');
+        }
         next()
     } catch (error) {
+        console.error("JWT Verification Error:", error.message, "Token received:", token ? `${token.substring(0, 10)}...` : 'null');
         res.status(400).send('Invalid Token')
     }
 }

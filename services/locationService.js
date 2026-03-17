@@ -12,6 +12,18 @@ class LocationService {
     async deleteDriverSocket(driverId) {
         return await redisClient.del(`driver:${driverId}`)
     }
+
+    async setPassengerSocket(passengerId, socketId) {
+        await redisClient.set(`passenger:${passengerId}`, socketId)
+    }
+
+    async getPassengerSocket(passengerId) {
+        return await redisClient.get(`passenger:${passengerId}`)
+    }
+
+    async deletePassengerSocket(passengerId) {
+        return await redisClient.del(`passenger:${passengerId}`)
+    }
     //function for finding driver location and adding it to db
 
     async addDriverLocation(driverId, latitude, longitude) {
@@ -35,6 +47,7 @@ class LocationService {
             'drivers',
             longitude.toString(),
             latitude.toString(),
+            radiusKm.toString(),
             'km',
             'WITHCOORD',
         ])

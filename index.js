@@ -12,7 +12,7 @@ import redisClient, { connectRedis } from "./utils/redisClient.js";
 import authRoutes from "./routes/authRoutes.js";
 import driverRoutes from "./routes/driverRoutes.js";
 import passengerRoutes from "./routes/passengerRoutes.js";
-// import bookingRoutes from "./routes/bookingRoutes.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
 
 import locationService from "./services/locationService.js";
 
@@ -34,22 +34,33 @@ app.use(express.static('public'));
 app.use('/api/auth', authRoutes);
 app.use('/api/drivers', driverRoutes);
 app.use('/api/passengers', passengerRoutes);
-// app.use('/api/bookings', bookingRoutes);
+app.use('/api/bookings', bookingRoutes(io));
 
 io.on('connection', (socket) => {
   console.log(`New connection: ${socket.id}`);
 
   socket.on('registerDriver', async (driverId) => {
-    console.log(`Driver registered: ${driverId} with socket ${socket.id}`);
-    socket.driverId = driverId; // Store driverId on socket for disconnect handling
+    console.log(`Driver registered: ${driverId}`);
+    socket.userId = driverId;
+    socket.role = 'driver';
     await locationService.setDriverSocket(driverId, socket.id);
+  });
+
+  socket.on('registerPassenger', async (passengerId) => {
+    console.log(`Passenger registered: ${passengerId}`);
+    socket.userId = passengerId;
+    socket.role = 'passenger';
+    await locationService.setPassengerSocket(passengerId, socket.id);
   });
 
   socket.on('disconnect', async () => {
     console.log(`Socket disconnected: ${socket.id}`);
-    if (socket.driverId) {
-      await locationService.deleteDriverSocket(socket.driverId);
-      console.log(`Driver socket deleted: ${socket.driverId}`);
+    if (socket.userId) {
+      if (socket.role === 'driver') {
+        await locationService.deleteDriverSocket(socket.userId);
+      } else {
+        await locationService.deletePassengerSocket(socket.userId);
+      }
     }
   });
 });
@@ -59,7 +70,7 @@ const startServer = async () => {
     await connectDB();
     await connectRedis();
 
-    const PORT = process.env.PORT || 3000;
+    const PORT = process.env.PORT;
     httpServer.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });

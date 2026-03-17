@@ -15,21 +15,21 @@ const createBooking = async ({ passengerId, source, destination }) => {
         status: "pending",
         fare,
     }
-    const booking = bookingRepository.createBooking(bookingData)
+    const booking = await bookingRepository.createBooking(bookingData)
     return booking;
 }
 
 const findNearByDrivers = async (location, radius = 5) => {
     const longitude = parseFloat(location.longitude);
     const latitude = parseFloat(location.latitude);
-    const radiumKm = parseFloat(radius)
+    const radiusKm = parseFloat(radius)
 
     if (isNaN(longitude) || isNaN(latitude) || isNaN(radiusKm)) {
         throw new Error('Invalid coordinates or radius')
     }
     //saving the driver location to redis cache along with its id
-    const nearByDrivers = await locationService.findNearByDrivers(longitude, latitude, radiusKm)
-
+    const nearByDrivers = await locationService.findNearByDrivers(latitude, longitude, radiusKm)
+    return nearByDrivers;
 }
 
 const assignDriver = async (bookingId, driverId) => {

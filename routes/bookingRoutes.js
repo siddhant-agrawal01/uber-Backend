@@ -1,9 +1,12 @@
 import express from "express"
 import authMiddleware from "../middlewares/authMiddleware.js"
-import { createBooking, confirmBooking } from "../controllers/bookingController.js"
+import bookingController from "../controllers/bookingController.js"
 
-const router = express.Router()
-router.post('/', authMiddleware, createBooking(io))
-// router.post('/confirm', authMiddleware, confirmBooking(io))
-
-export default router
+export default (io) => {
+    const router = express.Router()
+    
+    router.post('/', authMiddleware, bookingController.createBooking(io))
+    router.post('/confirm', authMiddleware, bookingController.confirmBooking(io))
+    
+    return router
+}
